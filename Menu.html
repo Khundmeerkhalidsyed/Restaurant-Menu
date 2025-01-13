@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Menu</title>
+<style>
+       body { font-family: Arial, sans-serif; }
+       .menu-item { margin-bottom: 10px; }
+       .submit-btn { margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>Restaurant Menu</h1>
+<form id="menuForm">
+<div class="menu-item">
+<label><input type="checkbox" name="item" value="Pizza"> Pizza</label>
+</div>
+<div class="menu-item">
+<label><input type="checkbox" name="item" value="Burger"> Burger</label>
+</div>
+<div class="menu-item">
+<label><input type="checkbox" name="item" value="Pasta"> Pasta</label>
+</div>
+<div class="menu-item">
+<label><input type="checkbox" name="item" value="Salad"> Salad</label>
+</div>
+<button type="button" onclick="saveSelection()">Save</button>
+<button type="submit" class="submit-btn">Submit</button>
+</form>
+<script>
+       function saveSelection() {
+           const form = document.getElementById('menuForm');
+           const selectedItems = Array.from(form.elements['item'])
+               .filter(item => item.checked)
+               .map(item => item.value);
+           localStorage.setItem('selectedMenuItems', JSON.stringify(selectedItems));
+           alert('Selection saved!');
+       }
+       // Load saved selection on page load
+       window.onload = function() {
+           const savedItems = JSON.parse(localStorage.getItem('selectedMenuItems') || '[]');
+           savedItems.forEach(value => {
+               const item = Array.from(document.getElementsByName('item')).find(el => el.value === value);
+               if (item) item.checked = true;
+           });
+       }
+       // Handle form submission
+       document.getElementById('menuForm').onsubmit = function(e) {
+           e.preventDefault();
+           const selectedItems = Array.from(this.elements['item'])
+               .filter(item => item.checked)
+               .map(item => item.value);
+           alert('Order submitted: ' + selectedItems.join(', '));
+       }
+</script>
+</body>
+</html>
